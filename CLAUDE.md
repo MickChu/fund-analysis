@@ -1,52 +1,41 @@
 # CLAUDE.md
 
-This file provides context for AI assistants working with this repository.
+AI 助手工作指南。
 
-## Project Overview
+## 项目概述
 
-基金持仓分析系统 — Personal fund portfolio tracking toolkit. Fetches fund NAV (Net Asset Value) from public APIs, calculates P&L from Excel trade records, runs backtests, and generates weekly reports.
+个人基金持仓跟踪工具。从天天基金 API 获取净值，基于 Excel 交易记录计算盈亏，支持定投回测和周报生成。
 
-**Language:** Python 3.8+, all comments and UI output in Chinese.
+**语言**：Python 3.8+，中文注释和输出。
 
-## Repository Structure
+## 运行方式
 
-```
-V1/程序/          # Source code (all scripts here)
-V1/数据/          # Data files (gitignored, not uploaded)
-  ├── 基金交易记录.xlsx   # Trade records (sheets: 买入记录, 持仓份额)
-  ├── 买入记录.xlsx       # Purchase history
-  └── nav_cache/          # JSON cache per fund code
-V1/输出/          # Generated reports (gitignored)
-```
-
-## Running Scripts
-
-All scripts should be run from the repo root, paths are relative to `V1/`:
+脚本在仓库根目录运行：
 
 ```bash
-python V1/程序/nav_fetcher.py --codes 000051,001717
-python V1/程序/portfolio_tracker.py
-python V1/程序/backtest_engine.py --days 365
-python V1/程序/weekly_advisor.py
-python V1/程序/analyze_19_funds.py
+python nav_fetcher.py --codes 000051,001717
+python portfolio_tracker.py
+python backtest_engine.py --days 365
+python weekly_advisor.py
 ```
 
-## Key Data Sources
+## 数据源
 
-- **Fund NAV API:** `https://fundgz.1702.com/js/xxxxx.js` (天天基金 JSONP)
-- **Historical NAV:** `https://api.fund.eastmoney.com/f10/lsjz` (东方财富)
-- **Trade records:** Excel files in `V1/数据/`, GBK/UTF-8 mixed encoding
+- 净值 API：`https://fundgz.1702.com/js/xxxxx.js`（天天基金 JSONP）
+- 历史净值：`https://api.fund.eastmoney.com/f10/lsjz`（东方财富）
+- 交易记录：`数据/基金交易记录.xlsx`（GBK/UTF-8 混合编码）
 
-## Coding Conventions
+## 编码规范
 
-- Chinese file names are intentional (data files, output). Do not rename.
-- `logger.py` provides `setup_logging()` — use it instead of `print()` in all scripts.
-- Nav cache files: `V1/数据/nav_cache/{6-digit fund code}.json`.
-- Excel reading: always handle both GBK and UTF-8 encodings gracefully.
-- When adding new scripts, follow the existing pattern: argparse CLI → load config → main logic → output to `V1/输出/`.
+- 中文文件名是有意的（数据文件、输出文件），不要重命名
+- 使用 `logger.py` 的 `setup_logging()`，不用 `print()`
+- 净值缓存：`数据/nav_cache/{基金代码}.json`
+- 读取 Excel 时兼容 GBK 和 UTF-8 编码
+- 新脚本遵循：argparse CLI → 加载配置 → 主逻辑 → 输出到 `输出/`
 
-## Dependencies
+## 依赖
 
-- Standard library only (`urllib`, `json`, `csv`, `datetime`, `os`, `re`, etc.)
-- `openpyxl` for Excel read/write
-- No sklearn, no xgboost, no heavy ML libs in V1.
+- 标准库
+- openpyxl（Excel 读写）
+
+无重型 ML 库。
